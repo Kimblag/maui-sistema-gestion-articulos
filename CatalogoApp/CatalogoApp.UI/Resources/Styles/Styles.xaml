@@ -24,7 +24,7 @@
     </Style>
 
     <Style TargetType="Button">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource PrimaryTextColorDark}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource PrimaryTextColorDark}}" />
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="14"/>
@@ -489,9 +489,7 @@
         <Setter Property="BorderWidth" Value="0" />
         <Setter Property="HorizontalOptions" Value="Fill" />
         <Setter Property="ContentLayout" Value="Left,15" />
-        <Setter Property="ImageSource">
-            <FontImageSource FontFamily="FontAwesomeSolid" Glyph="?" Color="{StaticResource Primary}"/>
-        </Setter>
+   
 
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>

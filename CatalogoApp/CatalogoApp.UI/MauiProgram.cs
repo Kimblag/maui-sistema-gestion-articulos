@@ -14,35 +14,36 @@ namespace CatalogoApp.UI
             var builder = MauiApp.CreateBuilder();
 
             //Buscamos el app settings que contiene la cadena de conexión de la base de datos.
-            //var a = Assembly.GetExecutingAssembly();
-            //using var stream = a.GetManifestResourceStream("CatalogoApp.UI.appsettings.json");
+            var a = Assembly.GetExecutingAssembly();
+            using var stream = a.GetManifestResourceStream("CatalogoApp.UI.appsettings.json");
 
-            ////Comprobar si no es null antes de ejecutar
-            //if (stream != null)
-            //{
-            //    var config = new ConfigurationBuilder()
-            //                .AddJsonStream(stream)
-            //                .Build();
+            //Comprobar si no es null antes de ejecutar
+            if (stream != null)
+            {
+                var config = new ConfigurationBuilder()
+                            .AddJsonStream(stream)
+                            .Build();
 
-            //    builder.Configuration.AddConfiguration(config);
-            //}
+                builder.Configuration.AddConfiguration(config);
+            }
 
-            //// inyección de dependencias.
-            //// utilizamos singleton porque crea un solo objeto Repositorio la primera vez que se necesite, y luego reutiliza ese mismo objeto siempre
-            //// como es ligero, Singleton es una opción eficiente y común.
-            //builder.Services.AddSingleton<IRepositorioMarca, RepositorioMarcaSQL>();
-            //builder.Services.AddSingleton<IRepositorioCategoria, RepositorioCategoriaSQL>();
-            //builder.Services.AddSingleton<IRepositorioArticulo, RepositorioArticuloSQL>();
+            // inyección de dependencias.
+            // utilizamos singleton porque crea un solo objeto Repositorio la primera vez que se necesite, y luego reutiliza ese mismo objeto siempre
+            // como es ligero, Singleton es una opción eficiente y común.
+            builder.Services.AddSingleton<IRepositorioMarca, RepositorioMarcaSQL>();
+            builder.Services.AddSingleton<IRepositorioCategoria, RepositorioCategoriaSQL>();
+            builder.Services.AddSingleton<IRepositorioArticulo, RepositorioArticuloSQL>();
 
-            //// En este caso se utiliza Transient, a diferencia de Singleton, cada vez que se necesita un VM se trae uno nuevo.
-            //builder.Services.AddTransient<MarcaViewModel>();
-            //builder.Services.AddTransient<CategoriaViewModel>();
-            //builder.Services.AddTransient<ArticuloViewModel>();
+            // En este caso se utiliza Transient, a diferencia de Singleton, cada vez que se necesita un VM se trae uno nuevo.
+            builder.Services.AddTransient<MainViewModel>();
+            builder.Services.AddTransient<ArticuloViewModel>();
+            builder.Services.AddTransient<MarcaViewModel>();
+            builder.Services.AddTransient<CategoriaViewModel>();
 
-            //builder.Services.AddTransient<MainPage>();
-            //builder.Services.AddTransient<ArticuloPage>();
-            //builder.Services.AddTransient<MarcaPage>();
-            //builder.Services.AddTransient<CategoriaPage>();
+            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<ArticuloPage>();
+            builder.Services.AddTransient<MarcaPage>();
+            builder.Services.AddTransient<CategoriaPage>();
 
             builder
                 .UseMauiApp<App>()

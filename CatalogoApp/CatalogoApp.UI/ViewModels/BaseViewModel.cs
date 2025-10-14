@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace CatalogoApp.UI.ViewModels
 {
@@ -9,6 +10,17 @@ namespace CatalogoApp.UI.ViewModels
     /// </summary>
     public partial class BaseViewModel : INotifyPropertyChanged
     {
+
+        public ICommand NavegarAArticulosCommand { get; }
+        public ICommand NavegarAMarcasCommand { get; }
+        public ICommand NavegarACategoriasCommand { get; }
+
+        public BaseViewModel()
+        {
+            NavegarAArticulosCommand = new Command(async () => await NavegarAArticulos());
+            NavegarAMarcasCommand = new Command(async () => await NavegarAMarcas());
+            NavegarACategoriasCommand = new Command(async () => await NavegarACategorias());
+        }
         // public event: Declara un "evento". imagino que un evento es como un canal de radio.
         // Otras partes del código (la UI) pueden sintonizar este canal.
         // PropertyChanged: Es el nombre del evento que la interfaz INotifyPropertyChanged nos obliga a tener.
@@ -36,5 +48,22 @@ namespace CatalogoApp.UI.ViewModels
             // la propiedad que ha cambiado, para que la UI sepa exactamente qué parte de la pantalla debe actualizar.
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nombrePropiedad));
         }
+
+
+        #region Métodos
+        private async Task NavegarAArticulos()
+        {
+            await Shell.Current.GoToAsync(nameof(ArticuloPage));
+        }
+        private async Task NavegarAMarcas()
+        {
+            await Shell.Current.GoToAsync(nameof(MarcaPage));
+        }
+        private async Task NavegarACategorias()
+        {
+            await Shell.Current.GoToAsync(nameof(CategoriaPage));
+        }
+
+        #endregion
     }
 }

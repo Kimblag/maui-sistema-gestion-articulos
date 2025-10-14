@@ -2,7 +2,7 @@
 {
     public class Imagen
     {
-        public int Id { get; set; }
-        public required string Url { get; set; }
+        public int IdImagen { get; set; }
+        public required string UrlImagen { get; set; }
     }
 }

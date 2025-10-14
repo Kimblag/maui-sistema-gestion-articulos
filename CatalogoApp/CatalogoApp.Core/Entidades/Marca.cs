@@ -2,7 +2,7 @@
 {
     public class Marca
     {
-        public int Id { get; set; }
+        public int IdMarca { get; set; }
         public required string Descripcion { get; set; }
     }
 }

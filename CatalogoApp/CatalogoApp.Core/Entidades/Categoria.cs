@@ -2,7 +2,7 @@
 {
     public class Categoria
     {
-        public int Id { get; set; }
+        public int IdCategoria { get; set; }
         public required string Descripcion { get; set; }
     }
 }

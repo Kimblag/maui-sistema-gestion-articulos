@@ -138,7 +138,7 @@ namespace CatalogoApp.Data.Repositorios
 
                             while (lector.Read())
                             {
-                                articulos.Add(new Articulo
+                                Articulo articuloActual = new Articulo
                                 {
                                     IdArticulo = lector.GetInt32(idOrdinal),
                                     Codigo = lector.GetString(codigoOrdinal),
@@ -146,8 +146,11 @@ namespace CatalogoApp.Data.Repositorios
                                     Descripcion = lector.IsDBNull(descripcionOrdinal) ? null : lector.GetString(descripcionOrdinal),
                                     Precio = lector.GetDecimal(precioOrdinal),
                                     Marca = new Marca { IdMarca = lector.GetInt32(idMarcaOrdinal), Descripcion = lector.GetString(marcaOrdinal) },
-                                    Categoria = new Categoria { IdCategoria = lector.GetInt32(idCategoriaOrdinal), Descripcion = lector.GetString(categoriaOrdinal) }
-                                });
+                                    Categoria = new Categoria { IdCategoria = lector.GetInt32(idCategoriaOrdinal), Descripcion = lector.GetString(categoriaOrdinal) },
+                                    Imagenes = new List<Imagen>()
+
+                                };
+                                articulos.Add(articuloActual);
                             }
                         }
                     }

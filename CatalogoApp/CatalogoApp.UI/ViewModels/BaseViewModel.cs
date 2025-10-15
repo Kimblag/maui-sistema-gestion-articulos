@@ -39,7 +39,12 @@ namespace CatalogoApp.UI.ViewModels
             // this: Quién está enviando la notificación(el propio ViewModel).
             // new PropertyChangedEventArgs(propertyName): Un objeto que contiene el nombre de
             // la propiedad que ha cambiado, para que la UI sepa exactamente qué parte de la pantalla debe actualizar.
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nombrePropiedad));
+
+            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nombrePropiedad));
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nombrePropiedad));
+            });
         }
     }
 }

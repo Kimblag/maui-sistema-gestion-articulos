@@ -8,5 +8,7 @@ namespace CatalogoApp.Core.Interfaces
         void Agregar(Articulo nuevoArticulo);
         void Actualizar(Articulo articulo);
         void Eliminar(int idArticulo);
+
+        List<Imagen> ObtenerImagenes(int idArticulo);
     }
 }

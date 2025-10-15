@@ -1,18 +1,66 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:CatalogoApp.UI.Converters"
+             xmlns:models="clr-namespace:CatalogoApp.Core.Entidades;assembly=CatalogoApp.Core"
              x:Class="CatalogoApp.UI.Views.ContentViews.ArticulosView">
 
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
+            <converters:CountToBoolConverter x:Key="CountToBoolConverter" />
+        </ResourceDictionary>
+    </ContentView.Resources>
 
-    <Grid RowDefinitions="Auto,*" ColumnDefinitions="3*,2*">
+    <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="3*,2*">
 
         <!--Sección de filtros avanzados.-->
-        <StackLayout>
-            <Label Text="Filtros"></Label>
-        </StackLayout>
+
+        <Border Grid.Row="0" Grid.ColumnSpan="2" 
+        StrokeShape="RoundRectangle 10" 
+        BackgroundColor="{StaticResource White}" 
+        Padding="15" Margin="20,20,20,0">
+            <Grid ColumnSpacing="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Picker Grid.Column="0" Title="Campo" 
+                ItemsSource="{Binding ListaDeCampos}" 
+                SelectedItem="{Binding CampoSeleccionado}" />
+
+                <Picker Grid.Column="1" Title="Criterio"
+                ItemsSource="{Binding ListaDeCriterios}" 
+                SelectedItem="{Binding CriterioSeleccionado}" />
+
+                <Grid Grid.Column="2">
+                    <Label Text="Valor"></Label>
+                    <Entry Placeholder="Valor..." 
+                        PlaceholderColor="{StaticResource Gray400}" 
+                        TextColor="{StaticResource PrimaryTextColor}"
+                        FontSize="14"
+                        Background="Transparent"
+                        VerticalOptions="End"
+                        Margin="0,29,0,0"
+                        Text="{Binding ValorFiltro}"
+                        IsEnabled="{Binding EstaHabilitadoEntryValor}"
+                    />
+
+                </Grid>
+
+                <Button Grid.Column="3" MaximumHeightRequest="60" VerticalOptions="End" Text="Aplicar" Command="{Binding AplicarFiltrosCommand}" />
+                <Button Grid.Column="4" MaximumHeightRequest="60" VerticalOptions="End" Text="Limpiar" Command="{Binding LimpiarFiltrosCommand}" />
+            </Grid>
+        </Border>
+
+
 
         <!--row título y buscador-->
-        <Grid Grid.Row="0" Grid.ColumnSpan="2"
+        <Grid Grid.Row="1" Grid.ColumnSpan="2"
               Margin="20,20,20,10"
               ColumnDefinitions="*,Auto">
 
@@ -23,36 +71,21 @@
                TextColor="{StaticResource AccentColor}" 
                VerticalOptions="Center" />
 
-            <Border Grid.Column="1" 
-                StrokeShape="RoundRectangle 10" 
-                Stroke="{StaticResource Secondary}" 
-                BackgroundColor="White" 
-                Padding="10,0"
-                HeightRequest="45"
-                WidthRequest="300" 
-                VerticalOptions="Center">
-
-                <!--filtro rápido-->
-                <Grid ColumnDefinitions="Auto,*">
-                    <Image Grid.Column="0" Source="search_icon.png" 
-                       HeightRequest="20" WidthRequest="20" 
-                       VerticalOptions="Center" 
-                       Margin="0,0,10,0"/>
-                    <Entry Grid.Column="1" Placeholder="Buscar artículos..." 
+            <!--filtro rápido-->
+            <SearchBar Grid.Column="1" Placeholder="Buscar artículos..." 
                        PlaceholderColor="{StaticResource Gray400}" 
                        TextColor="{StaticResource PrimaryTextColor}"
                        FontSize="14"
-                       Background="Transparent"
-                       VerticalOptions="Center"/>
-                </Grid>
-            </Border>
+                       Background="White"
+                       HeightRequest="45"
+                       WidthRequest="300"
+                       VerticalOptions="Center"
+                       Text="{Binding ValorFiltroRapido}" />
         </Grid>
 
 
         <!--tabla-->
-
-
-        <Border Grid.Row="1" Grid.Column="0"
+        <Border Grid.Row="2" Grid.Column="0"
                 StrokeShape="RoundRectangle 15"
                 Stroke="{StaticResource Secondary}"
                 BackgroundColor="White"
@@ -103,7 +136,10 @@
 
         </Border>
 
-        <!--<Border Grid.Row="1" Grid.Column="1"
+        <!--Detalle articulo-->
+
+            
+        <Border Grid.Row="2" Grid.Column="1"
                 StrokeShape="RoundRectangle 15"
                 Stroke="{StaticResource Secondary}"
                 BackgroundColor="White"
@@ -111,15 +147,43 @@
                 Padding="20"
                 IsVisible="{Binding ArticuloSeleccionado, Converter={StaticResource NullToBoolConverter}}"
                 >
+        <ScrollView>
             <VerticalStackLayout Spacing="10">
-                <Image Source="{Binding ArticuloSeleccionado.Imagen}" HeightRequest="150" Aspect="AspectFit" />
+
+                <!--Imagenes-->
+                <VerticalStackLayout>
+
+                    <Grid>
+                        <Image x:Name="MainImage"
+                       Aspect="AspectFit"
+                       HeightRequest="350"/>
+
+                        <!-- Flechas para cambiar imagen -->
+                        <Button Text="&lt;" Clicked="PrevImage_Clicked"
+                    VerticalOptions="Center" HorizontalOptions="Start"
+                    WidthRequest="40" HeightRequest="40" />     
+
+                        <Button Text=">" Clicked="NextImage_Clicked"
+                            VerticalOptions="Center" HorizontalOptions="End"
+                            WidthRequest="40" HeightRequest="40" />
+                    </Grid>
+
+                    <!-- Indicador tipo "1 / N" -->
+                    <Label x:Name="ImageCounterLabel"
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold"
+                       Text=""/>
+                </VerticalStackLayout>
+
+                <!--<Image Source="{Binding ArticuloSeleccionado.Imagenes[0].UrlImagen}" HeightRequest="350" />-->
                 <Label Text="{Binding ArticuloSeleccionado.Nombre}" FontSize="20" FontAttributes="Bold"/>
                 <Label Text="{Binding ArticuloSeleccionado.Descripcion}" FontSize="14" TextColor="Gray"/>
-                <Label Text="{Binding ArticuloSeleccionado.Marca}" />
-                <Label Text="{Binding ArticuloSeleccionado.Categoria}" />
+                <Label Text="{Binding ArticuloSeleccionado.Marca.Descripcion}" />
+                <Label Text="{Binding ArticuloSeleccionado.Categoria.Descripcion}" />
                 <Label Text="{Binding ArticuloSeleccionado.Precio, StringFormat='Precio: ${0:F2}'}" FontAttributes="Bold" />
             </VerticalStackLayout>
-        </Border>-->
+        </ScrollView>
+        </Border>
 
 
 

@@ -11,15 +11,9 @@ namespace CatalogoApp.UI.ViewModels
     public partial class BaseViewModel : INotifyPropertyChanged
     {
 
-        public ICommand NavegarAArticulosCommand { get; }
-        public ICommand NavegarAMarcasCommand { get; }
-        public ICommand NavegarACategoriasCommand { get; }
 
         public BaseViewModel()
         {
-            NavegarAArticulosCommand = new Command(async () => await NavegarAArticulos());
-            NavegarAMarcasCommand = new Command(async () => await NavegarAMarcas());
-            NavegarACategoriasCommand = new Command(async () => await NavegarACategorias());
         }
         // public event: Declara un "evento". imagino que un evento es como un canal de radio.
         // Otras partes del código (la UI) pueden sintonizar este canal.
@@ -38,7 +32,6 @@ namespace CatalogoApp.UI.ViewModels
         // Esto ahorra escribir el nombre a mano y previene errores de tipeo.
         protected void OnPropertyChanged([CallerMemberName] string? nombrePropiedad = null)
         {
-
             // Esta es la línea que finalmente hace sonar la radio.
             // PropertyChanged?: El ? comprueba si alguien está escuchando el canal de
             // radio. Si nadie está sintonizado(es nulo), no hace nada y evita un error.
@@ -48,22 +41,5 @@ namespace CatalogoApp.UI.ViewModels
             // la propiedad que ha cambiado, para que la UI sepa exactamente qué parte de la pantalla debe actualizar.
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nombrePropiedad));
         }
-
-
-        #region Métodos
-        private async Task NavegarAArticulos()
-        {
-            await Shell.Current.GoToAsync(nameof(ArticuloPage));
-        }
-        private async Task NavegarAMarcas()
-        {
-            await Shell.Current.GoToAsync(nameof(MarcaPage));
-        }
-        private async Task NavegarACategorias()
-        {
-            await Shell.Current.GoToAsync(nameof(CategoriaPage));
-        }
-
-        #endregion
     }
 }

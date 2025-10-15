@@ -1,6 +1,8 @@
 ﻿using CatalogoApp.Core.Interfaces;
 using CatalogoApp.Data.Repositorios;
+using CatalogoApp.UI.Helpers;
 using CatalogoApp.UI.ViewModels;
+using CatalogoApp.UI.Views.ContentViews;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
@@ -36,14 +38,16 @@ namespace CatalogoApp.UI
 
             // En este caso se utiliza Transient, a diferencia de Singleton, cada vez que se necesita un VM se trae uno nuevo.
             builder.Services.AddTransient<MainViewModel>();
-            builder.Services.AddTransient<ArticuloViewModel>();
-            builder.Services.AddTransient<MarcaViewModel>();
-            builder.Services.AddTransient<CategoriaViewModel>();
-
             builder.Services.AddTransient<MainPage>();
-            builder.Services.AddTransient<ArticuloPage>();
-            builder.Services.AddTransient<MarcaPage>();
-            builder.Services.AddTransient<CategoriaPage>();
+
+            builder.Services.AddTransient<ArticuloViewModel>();
+            builder.Services.AddTransient<ArticulosView>();
+
+            builder.Services.AddTransient<MarcaViewModel>();
+            builder.Services.AddTransient<MarcasView>();
+
+            builder.Services.AddTransient<CategoriaViewModel>();
+            builder.Services.AddTransient<CategoriasView>();
 
             builder
                 .UseMauiApp<App>()
@@ -57,7 +61,10 @@ namespace CatalogoApp.UI
             builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
+            var app = builder.Build();
+            ServiceHelper.Initialize(app.Services);
+
+            return app;
         }
     }
 }

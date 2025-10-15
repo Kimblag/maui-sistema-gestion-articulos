@@ -7,9 +7,6 @@ namespace CatalogoApp.UI
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute(nameof(ArticuloPage), typeof(ArticuloPage));
-            Routing.RegisterRoute(nameof(MarcaPage), typeof(MarcaPage));
-            Routing.RegisterRoute(nameof(CategoriaPage), typeof(CategoriaPage));
         }
     }
 }

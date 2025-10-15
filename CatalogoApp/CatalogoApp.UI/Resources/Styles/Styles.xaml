@@ -474,35 +474,53 @@
         </Setter>
     </Style>
 
-    <Style x:Key="StackTitleStyle" TargetType="StackLayout">
-        <Setter Property="Margin" Value="0,20,0,50" />
-        <Setter Property="Padding" Value="20" />
-    </Style>
-
-    <Style x:Key="MenuButtonStyle" TargetType="Button">
+    <Style x:Key="MenuItemContainerStyle" TargetType="Border">
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="TextColor" Value="{StaticResource PrimaryTextColor}" />
-        <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="Padding" Value="15,10" />
-        <Setter Property="Margin" Value="5,0" />
-        <Setter Property="BorderWidth" Value="0" />
-        <Setter Property="HorizontalOptions" Value="Fill" />
-        <Setter Property="ContentLayout" Value="Left,15" />
-   
-
+        <Setter Property="Padding" Value="10,12" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 10" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
                     <VisualState x:Name="Normal" />
                     <VisualState x:Name="PointerOver">
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{StaticResource Gray100}" />
+                            <Setter Property="BackgroundColor" Value="#1A000000" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
+    </Style>
+
+    <Style x:Key="MenuIconStyle" TargetType="Image">
+        <Setter Property="HeightRequest" Value="20" />
+        <Setter Property="WidthRequest" Value="20" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="MenuTextStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource PrimaryTextColor}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="NotificationBadgeStyle" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="OrangeRed" />
+        <Setter Property="HeightRequest" Value="22" />
+        <Setter Property="WidthRequest" Value="22" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 22" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="NotificationTextStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
 </ResourceDictionary>

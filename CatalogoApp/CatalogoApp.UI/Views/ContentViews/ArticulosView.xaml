@@ -12,7 +12,7 @@
         </ResourceDictionary>
     </ContentView.Resources>
 
-    <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="3*,2*">
+    <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="3*,1*">
 
         <!--Sección de filtros avanzados.-->
 
@@ -86,27 +86,47 @@
 
         <!--tabla-->
         <Border Grid.Row="2" Grid.Column="0"
+                x:Name="TablaArticulos"
                 StrokeShape="RoundRectangle 15"
                 Stroke="{StaticResource Secondary}"
                 BackgroundColor="White"
                 Margin="20,0,10,20"
-                Padding="0">
+                Padding="0"
+                Grid.ColumnSpan="1"
+                >
+            <!--cambiar propiedades visuales de un control en función de un valor de datos (binding).-->
+            <Border.Triggers>
+                <DataTrigger TargetType="Border"
+                     Binding="{Binding ArticuloSeleccionado, Converter={StaticResource NullToBoolConverter}}"
+                     Value="False">
+                    <!-- No hay artículo seleccionado -->
+                    <Setter Property="Grid.ColumnSpan" Value="2" />
+                </DataTrigger>
+                <DataTrigger TargetType="Border"
+                     Binding="{Binding ArticuloSeleccionado, Converter={StaticResource NullToBoolConverter}}"
+                     Value="True">
+                    <!-- Hay artículo seleccionado -->
+                    <Setter Property="Grid.ColumnSpan" Value="1" />
+                </DataTrigger>
+            </Border.Triggers>
+
 
             <Grid RowDefinitions="Auto,*" Padding="20">
 
                 <!--encabezado-->
                 <Grid Grid.Row="0"
-                      ColumnDefinitions="*,*,*,*,*,Auto"
+                      ColumnDefinitions="*,*,*,*,*,*,*"
                       Padding="0,0,0,10"
                       ColumnSpacing="10"
                       
                       >
-                    <Label Text="Código" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Label Grid.Column="0" Text="Código" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
                     <Label Grid.Column="1" Text="Nombre" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
                     <Label Grid.Column="2" Text="Descripción" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
                     <Label Grid.Column="3" Text="Marca" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
                     <Label Grid.Column="4" Text="Categoría" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
                     <Label Grid.Column="5" Text="Precio" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Label Grid.Column="6" TextType="Text" Text="Acciones" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
                 </Grid>
 
                 <Border BackgroundColor="{StaticResource Secondary}" Margin="0, 30, 0, 0" HeightRequest="1" />
@@ -119,13 +139,27 @@
                                 >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid ColumnDefinitions="*,*,*,*,*,Auto" Padding="10,15" ColumnSpacing="10">
+                            <Grid ColumnDefinitions="*,*,*,*,*,*,Auto" Padding="10,15" ColumnSpacing="10">
                                 <Label Grid.Column="0" Text="{Binding Codigo}" />
                                 <Label Grid.Column="1" Text="{Binding Nombre}" />
                                 <Label Grid.Column="2" Text="{Binding Descripcion}" />
                                 <Label Grid.Column="3" Text="{Binding Marca.Descripcion}" />
                                 <Label Grid.Column="4" Text="{Binding Categoria.Descripcion}" />
                                 <Label Grid.Column="5" Text="{Binding Precio}" />
+
+                                <!-- Nueva columna de acciones -->
+                                <HorizontalStackLayout Grid.Column="6" Spacing="10">
+                                    <Button HeightRequest="32"
+                                            WidthRequest="80"
+                                            FontSize="12"
+                                            Padding="6,0" Text="Editar" />
+                                    <Button HeightRequest="32"
+                                            WidthRequest="80"
+                                            FontSize="12"
+                                            Padding="6,0" Text="Eliminar" />
+                                </HorizontalStackLayout>
+
+
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -138,7 +172,7 @@
 
         <!--Detalle articulo-->
 
-            
+
         <Border Grid.Row="2" Grid.Column="1"
                 StrokeShape="RoundRectangle 15"
                 Stroke="{StaticResource Secondary}"
@@ -147,42 +181,42 @@
                 Padding="20"
                 IsVisible="{Binding ArticuloSeleccionado, Converter={StaticResource NullToBoolConverter}}"
                 >
-        <ScrollView>
-            <VerticalStackLayout Spacing="10">
+            <ScrollView>
+                <VerticalStackLayout Spacing="10">
 
-                <!--Imagenes-->
-                <VerticalStackLayout>
+                    <!--Imagenes-->
+                    <VerticalStackLayout>
 
-                    <Grid>
-                        <Image x:Name="MainImage"
+                        <Grid>
+                            <Image x:Name="MainImage"
                        Aspect="AspectFit"
-                       HeightRequest="350"/>
+                       HeightRequest="350" Source="{Binding ImagenMostrada.UrlImagen}"/>
 
-                        <!-- Flechas para cambiar imagen -->
-                        <Button Text="&lt;" Clicked="PrevImage_Clicked"
+                            <!-- Flechas para cambiar imagen -->
+                            <Button Text="&lt;" Command="{Binding ImagenAnteriorCommand}"
                     VerticalOptions="Center" HorizontalOptions="Start"
-                    WidthRequest="40" HeightRequest="40" />     
+                    WidthRequest="40" HeightRequest="40" IsVisible="{Binding EstanVisiblesBotones}" />
 
-                        <Button Text=">" Clicked="NextImage_Clicked"
+                            <Button Text=">" Command="{Binding ImagenSiguienteCommand}"
                             VerticalOptions="Center" HorizontalOptions="End"
-                            WidthRequest="40" HeightRequest="40" />
-                    </Grid>
+                            WidthRequest="40" HeightRequest="40" IsVisible="{Binding EstanVisiblesBotones}" />
+                        </Grid>
 
-                    <!-- Indicador tipo "1 / N" -->
-                    <Label x:Name="ImageCounterLabel"
+                        <!-- Indicador tipo "1 / N" -->
+                        <Label x:Name="ImageCounterLabel"
                        HorizontalOptions="Center"
                        FontAttributes="Bold"
-                       Text=""/>
-                </VerticalStackLayout>
+                       Text="{Binding ContadorImagenes}" IsVisible="{Binding EstanVisiblesBotones}"/>
+                    </VerticalStackLayout>
 
-                <!--<Image Source="{Binding ArticuloSeleccionado.Imagenes[0].UrlImagen}" HeightRequest="350" />-->
-                <Label Text="{Binding ArticuloSeleccionado.Nombre}" FontSize="20" FontAttributes="Bold"/>
-                <Label Text="{Binding ArticuloSeleccionado.Descripcion}" FontSize="14" TextColor="Gray"/>
-                <Label Text="{Binding ArticuloSeleccionado.Marca.Descripcion}" />
-                <Label Text="{Binding ArticuloSeleccionado.Categoria.Descripcion}" />
-                <Label Text="{Binding ArticuloSeleccionado.Precio, StringFormat='Precio: ${0:F2}'}" FontAttributes="Bold" />
-            </VerticalStackLayout>
-        </ScrollView>
+                    <!--<Image Source="{Binding ArticuloSeleccionado.Imagenes[0].UrlImagen}" HeightRequest="350" />-->
+                    <Label Text="{Binding ArticuloSeleccionado.Nombre}" FontSize="20" FontAttributes="Bold"/>
+                    <Label Text="{Binding ArticuloSeleccionado.Descripcion}" FontSize="14" TextColor="Gray"/>
+                    <Label Text="{Binding ArticuloSeleccionado.Marca.Descripcion}" />
+                    <Label Text="{Binding ArticuloSeleccionado.Categoria.Descripcion}" />
+                    <Label Text="{Binding ArticuloSeleccionado.Precio, StringFormat='Precio: ${0:F2}'}" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </ScrollView>
         </Border>
 
 

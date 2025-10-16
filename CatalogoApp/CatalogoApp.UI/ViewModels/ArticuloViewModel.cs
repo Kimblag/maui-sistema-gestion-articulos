@@ -38,6 +38,8 @@ namespace CatalogoApp.UI.ViewModels
 
                 _articuloSeleccionado = value;
                 CargarImagenesDelArticuloSeleccionado();
+                _indiceImagenActual = 0;
+                ActualizarImagenMostrada();
                 OnPropertyChanged();
             }
         }
@@ -83,6 +85,41 @@ namespace CatalogoApp.UI.ViewModels
             }
         }
 
+        // para la galería de imágenes
+        private bool _estanVisiblesBotones = true;
+        public bool EstanVisiblesBotones
+        {
+            get => _estanVisiblesBotones;
+            set
+            {
+                _estanVisiblesBotones = value;
+                OnPropertyChanged(); // notifica que cambió
+            }
+        }
+
+        private int _indiceImagenActual = 0;
+        private Imagen? _imagenMostrada;
+        public Imagen? ImagenMostrada
+        {
+            get => _imagenMostrada;
+            set
+            {
+                _imagenMostrada = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _contadorImagenes;
+        public string ContadorImagenes
+        {
+            get => _contadorImagenes;
+            set
+            {
+                _contadorImagenes = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         //Comandos
         public ICommand CargarArticulosCommand { get; }
@@ -90,6 +127,10 @@ namespace CatalogoApp.UI.ViewModels
         // comandos filtros
         public ICommand AplicarFiltrosCommand { get; }
         public ICommand LimpiarFiltrosCommand { get; }
+
+        // comandos galería
+        public ICommand ImagenSiguienteCommand { get; }
+        public ICommand ImagenAnteriorCommand { get; }
 
 
         public ArticuloViewModel(IRepositorioArticulo repo, IRepositorioMarca marcaRepo, IRepositorioCategoria categoriaRepo)
@@ -112,6 +153,9 @@ namespace CatalogoApp.UI.ViewModels
             ValorFiltro = string.Empty;
             _valorFiltroRapido = string.Empty;
 
+            _contadorImagenes = string.Empty;
+            ImagenSiguienteCommand = new Command(ImagenSiguiente);
+            ImagenAnteriorCommand = new Command(ImagenAnterior);
         }
 
 
@@ -380,6 +424,41 @@ namespace CatalogoApp.UI.ViewModels
             {
                 Articulos.Add(articulo);
             }
+        }
+
+        private void ImagenSiguiente()
+        {
+            List<Imagen>? imagenes = ArticuloSeleccionado?.Imagenes;
+            if (imagenes == null || imagenes.Count == 0) return;
+            _indiceImagenActual = (_indiceImagenActual + 1) % imagenes.Count;
+            ActualizarImagenMostrada();
+        }
+
+        private void ImagenAnterior()
+        {
+            List<Imagen>? imagenes = ArticuloSeleccionado?.Imagenes;
+            if (imagenes == null || imagenes.Count == 0) return;
+
+            _indiceImagenActual = (_indiceImagenActual - 1 + imagenes.Count) % imagenes.Count;
+            ActualizarImagenMostrada();
+        }
+
+
+        private void ActualizarImagenMostrada()
+        {
+            List<Imagen>? imagenes = ArticuloSeleccionado?.Imagenes;
+            
+            if (imagenes == null || imagenes.Count == 0)
+            {
+                ImagenMostrada = new Imagen { UrlImagen = "imagen_default.png" };
+                ContadorImagenes = "0 / 0";
+                EstanVisiblesBotones = false;
+                return;
+            }
+
+            EstanVisiblesBotones = imagenes.Count > 1;
+            ImagenMostrada = imagenes[_indiceImagenActual];
+            ContadorImagenes = $"{_indiceImagenActual + 1} / {imagenes.Count}";
         }
 
     }
